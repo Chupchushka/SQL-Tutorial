@@ -47,9 +47,7 @@ void insert_data(sqlite3* db){
         printf("operation insert successful \n");
     }
 }
-
-
-void delete_data(sqlite3* db){
+ void delete_data(sqlite3* db){
     char* errMsg;
     char* sql = "DELETE FROM 'STUDENT'  WHERE ID=2; ";
     
@@ -62,32 +60,16 @@ void delete_data(sqlite3* db){
     }
 }
 
-void read_data_smt(sqlite3* db) {
-    char* sql = "SELECT * FROM 'STUDENT'; ";
-                
-    sqlite3_stmt* stmt;
-    int rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-    if(rc != SQLITE_OK){
-        printf("error occurred: %s", sqlite3_errmsg(db));
-    } else {
-       
-        int NoOfCols = sqlite3_column_count(stmt); //get the number of columns in the table
-        printf("NoOfCols: %d", NoOfCols);        
-        for(int i=0; i<NoOfCols; i++){ //iterate through the columns and get data for each column
-                    const  char* colName =  sqlite3_column_name(stmt, i); //get the column name
-                    printf("colName: %s\n", colName);
-                }
-}
-}
+
 
 int main(){
     
     const char* filename = "db.sqlite3";
     open_db(filename, db); 
     //create_table(db);
-    insert_data(db);
+    //insert_data(db);
     //delete_data(db);
-    read_data_smt(db);
+    //read_data_smt(db);
     sqlite3_close(db);
 
     return 0;
