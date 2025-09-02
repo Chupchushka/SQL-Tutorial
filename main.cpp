@@ -32,12 +32,62 @@ void create_table(sqlite3* database){
     }                
 }
 
+void insert_data(sqlite3* db){
+    char* errMsg;
+    char* sql = "INSERT INTO STUDENT (ID, FIRST_NAME, LAST_NAME, EMAIL) "
+                "VALUES"
+                "(2, 'Peter', 'Griffin', 'peter@griffin.com');";
+
+    
+    int rc = sqlite3_exec(db, sql, NULL, 0, &errMsg);
+    if(rc != SQLITE_OK) {
+        printf("error occured %s\n", errMsg);
+        sqlite3_free(errMsg);
+    } else {
+        printf("operation insert successful \n");
+    }
+}
+
+
+void delete_data(sqlite3* db){
+    char* errMsg;
+    char* sql = "DELETE FROM 'STUDENT'  WHERE ID=2; ";
+    
+    int rc = sqlite3_exec(db, sql, NULL, 0, &errMsg);
+    if(rc != SQLITE_OK) {
+        printf("error occured %s\n", errMsg);
+        sqlite3_free(errMsg);
+    } else {
+        printf("deleted record successfully \n");
+    }
+}
+
+void read_data_smt(sqlite3* db) {
+    char* sql = "SELECT * FROM 'STUDENT'; ";
+                
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if(rc != SQLITE_OK){
+        printf("error occurred: %s", sqlite3_errmsg(db));
+    } else {
+       
+        int NoOfCols = sqlite3_column_count(stmt); //get the number of columns in the table
+        printf("NoOfCols: %d", NoOfCols);        
+        for(int i=0; i<NoOfCols; i++){ //iterate through the columns and get data for each column
+                    const  char* colName =  sqlite3_column_name(stmt, i); //get the column name
+                    printf("colName: %s\n", colName);
+                }
+}
+}
 
 int main(){
     
     const char* filename = "db.sqlite3";
     open_db(filename, db); 
-    create_table(db);
+    //create_table(db);
+    insert_data(db);
+    //delete_data(db);
+    read_data_smt(db);
     sqlite3_close(db);
 
     return 0;
