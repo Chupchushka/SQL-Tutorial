@@ -60,7 +60,23 @@ void insert_data(sqlite3* db){
     }
 }
 
-
+void read_data_smt(sqlite3* db) {
+    char* sql = "SELECT * FROM 'STUDENT'; ";
+                
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if(rc != SQLITE_OK){
+        printf("error occurred: %s", sqlite3_errmsg(db));
+    } else {
+       
+        int NoOfCols = sqlite3_column_count(stmt); //get the number of columns in the table
+        printf("NoOfCols: %d", NoOfCols);        
+        for(int i=0; i<NoOfCols; i++){ //iterate through the columns and get data for each column
+                    const  char* colName =  sqlite3_column_name(stmt, i); //get the column name
+                    printf("colName: %s\n", colName);
+                }
+}
+}
 
 int main(){
     
